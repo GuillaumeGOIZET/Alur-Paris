@@ -20,29 +20,50 @@
 
 ---
 
-## Jour 2 — Mardi [19/05/2026]
+## Jour 2 — Mardi 19 mai
 
 ### Ce que j'ai fait
-- Configuration de l'environnement de développement (XAMPP, Composer, .env, Git)
-- Conception et écriture du schéma SQL complet (9 tables avec FK et indexes)
-- Données initiales : 5 catégories, 5 statuts, compte admin
-- Catalogue de 20 produits avec descriptions et notes olfactives
-- Installation des dépendances Composer (Stripe SDK, PHPMailer, Dotenv)
-- Configuration de l'URL rewriting via .htaccess (architecture front controller)
-- Structure complète des dossiers MVC
+- Configuration environnement (XAMPP, Composer, Git, Stripe test, Mailtrap)
+- Conception SQL : schéma complet de 9 tables avec FK et indexes
+- Données initiales (catégories, statuts) + catalogue de 20 parfums
+- Architecture MVC : Database singleton, Model abstrait, Router avec paramètres 
+  dynamiques, Controller mère, point d'entrée index.php
+- Test réussi de connexion BDD (les 5 catégories s'affichent depuis la BDD)
 
 ### Difficultés rencontrées
-- Comprendre la différence entre BOOLEAN DEFAULT 'false' et DEFAULT FALSE
-- Erreur de hash bcrypt tronqué — résolue en regénérant avec PHP
-- Configuration SSH GitHub remplacée par HTTPS pour gagner du temps
+- Erreur Dotenv liée à un espace dans une valeur non quotée (SMTP_FROM_NAME=Alur Paris).
+  Résolu en quotant les valeurs avec espace, ce qui m'a appris les règles strictes 
+  de parsing des fichiers .env.
+- Configuration AllowOverride à vérifier dans httpd.conf de XAMPP.
+- URL rewriting Apache qui ne fonctionne pas en sous-dossier (/alur-paris/) sur 
+  XAMPP. Le code MVC est en place et fonctionne quand on accède directement à 
+  /public/index.php, mais la réécriture vers index.php depuis la racine n'est 
+  pas active. À résoudre demain matin (priorité 1).
 
 ### Décisions clés prises
-- Choix de DECIMAL(10,2) sur les prix pour éviter les erreurs d'arrondi FLOAT
-- Architecture front controller avec public/ comme seule racine web exposée (sécurité)
-- Adresse de livraison figée dans la table commande (préservation de l'historique)
-- Séparation données système (seeds) vs données métier (data_produits)
+- DECIMAL(10,2) pour les prix (vs FLOAT) pour éviter les erreurs d'arrondi
+- Singleton pour la connexion PDO (une seule instance par requête HTTP)
+- Adresses figées dans la commande pour préserver l'historique
+- Architecture front controller (un seul point d'entrée index.php)
+- Séparation public/ vs app/ pour la sécurité (seul public/ exposé au web)
 
 ### Pour demain
-- Coder le Core MVC : Router, Database singleton, Controller mère, Model mère
-- Commencer le layout public (header, footer) avec Tailwind
-- Si temps : démarrer la page d'accueil
+- PRIORITÉ 1 : résoudre le rewriting .htaccess pour les URLs propres
+- Démarrer le layout HTML (header, footer) avec Tailwind CDN
+- Coder la page d'accueil avec rendu des produits depuis la BDD
+- Si temps : coder la liste catalogue et la fiche produit
+
+## REPRISE DEMAIN MATIN
+
+### Status au coucher (mardi 1h du matin)
+- Core MVC entièrement codé et fonctionnel
+- BDD opérationnelle (test réussi : 5 catégories affichées)
+- ✅ http://localhost/alur-paris/public/index.php fonctionne
+- ❌ http://localhost/alur-paris/ donne 404
+- AllowOverride All confirmé
+- mod_rewrite activé
+- .htaccess en place mais pas effectifs sur la racine
+
+### À tester demain en priorité
+1. Une approche unique .htaccess (sans double redirection)
+2. Alternative : créer un VirtualHost dédié alur.local

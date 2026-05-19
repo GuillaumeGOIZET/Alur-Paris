@@ -1,34 +1,37 @@
 <?php
 
+/**
+ * Point d'entrée unique de l'application (front controller).
+ * 
+ * Toutes les requêtes HTTP arrivent ici via le .htaccess.
+ * Ce fichier charge la config, démarre la session et dispatche au routeur.
+ */
+
+// 1. Charge la config (qui charge à son tour vendor/autoload.php et le .env)
 require_once __DIR__ . '/../config/config.php';
 
-use App\Core\Database;
+// 2. Démarre la session PHP (utile pour le panier, l'auth)
+session_start();
 
-echo "<h1>Test du Core Database & Model</h1>";
+// 3. Charge les routes
+$routes = require __DIR__ . '/../config/routes.php';
+
+// 4. Initialise le routeur et dispatche
+use App\Core\Router;
 
 try {
-    // Test 1 : connexion à la BDD
-    $pdo = Database::getConnection();
-    echo "<p>✅ Connexion BDD OK</p>";
-    
-    // Test 2 : récupération des catégories
-    $stmt = $pdo->query("SELECT * FROM categorie ORDER BY ordre_affichage");
-    $categories = $stmt->fetchAll();
-    
-    echo "<h2>Catégories en BDD :</h2><ul>";
-    foreach ($categories as $cat) {
-        echo "<li>" . htmlspecialchars($cat['nom']) . " (slug: " . htmlspecialchars($cat['slug']) . ")</li>";
-    }
-    echo "</ul>";
-    
-    // Test 3 : vérifier le singleton
-    $pdo2 = Database::getConnection();
-    if ($pdo === $pdo2) {
-        echo "<p>✅ Singleton OK : même instance PDO renvoyée</p>";
-    } else {
-        echo "<p>❌ Singleton KO : deux instances différentes</p>";
-    }
-    
+    $router = new Router($routes);
+    $router->dispatch();
 } catch (Throwable $e) {
-    echo "<p>❌ Erreur : " . htmlspecialchars($e->getMessage()) . "</p>";
+    if (APP_DEBUG) {
+        // En dev : on affiche l'erreur complète
+        echo "<h1>Erreur</h1>";
+        echo "<p><strong>" . htmlspecialchars($e->getMessage()) . "</strong></p>";
+        echo "<pre>" . htmlspecialchars($e->getTraceAsString()) . "</pre>";
+    } else {
+        // En prod : on log et on affiche une page propre
+        http_response_code(500);
+        echo "<h1>Erreur serveur</h1>";
+        echo "<p>Une erreur est survenue. Merci de réessayer plus tard.</p>";
+    }
 }
