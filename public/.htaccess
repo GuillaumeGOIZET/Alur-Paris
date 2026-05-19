@@ -1,0 +1,17 @@
+# Toutes les requêtes sont routées vers index.php
+# (sauf pour les fichiers et dossiers qui existent réellement)
+
+RewriteEngine On
+
+# Si le fichier ou dossier existe (CSS, JS, images), on le sert directement
+RewriteCond %{REQUEST_FILENAME} -f [OR]
+RewriteCond %{REQUEST_FILENAME} -d
+RewriteRule ^ - [L]
+
+# Sinon, tout est routé vers index.php
+RewriteRule ^(.*)$ index.php [QSA,L]
+
+# Bloquer l'accès aux fichiers cachés (.env, .htaccess, .git)
+<FilesMatch "^\.">
+    Require all denied
+</FilesMatch>

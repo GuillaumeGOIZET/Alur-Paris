@@ -1,0 +1,8 @@
+# Redirige toutes les requêtes vers le dossier public/
+# Cela permet d'éviter d'avoir /public/ dans les URLs
+
+RewriteEngine On
+
+# Si l'URL ne commence pas déjà par "public/", on l'y redirige
+RewriteCond %{REQUEST_URI} !^/alur-paris/public/
+RewriteRule ^(.*)$ public/$1 [L]
