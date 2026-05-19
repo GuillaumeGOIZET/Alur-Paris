@@ -1,0 +1,42 @@
+# Variables d'environnement et secrets
+.env
+.env.local
+.env.*.local
+
+# Dépendances
+/vendor/
+/node_modules/
+
+# Fichiers uploadés par les utilisateurs (à régénérer)
+/public/assets/uploads/*
+!/public/assets/uploads/.gitkeep
+!/public/assets/uploads/produits/
+!/public/assets/uploads/produits/.gitkeep
+
+# Logs et stockage temporaire
+/storage/logs/*.log
+/storage/sessions/*
+!/storage/logs/.gitkeep
+!/storage/sessions/.gitkeep
+
+# Cache PHP
+*.cache
+*.tmp
+
+# Fichiers système Windows
+Thumbs.db
+Desktop.ini
+ehthumbs.db
+
+# Fichiers système macOS (au cas où)
+.DS_Store
+
+# IDE et éditeurs
+/.vscode/
+/.idea/
+*.swp
+*.swo
+*~
+
+# Fichiers de configuration locale
+/config/local.php
