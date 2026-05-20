@@ -56,10 +56,13 @@
         class="fixed bottom-6 right-6 bg-noir text-blanc text-sm px-6 py-3 opacity-0 pointer-events-none transition-opacity duration-300 z-50">
     </div>
 
+    <?php require __DIR__ . '/../partials/cookie-banner.php'; ?>
+
     <script>
         window.ALUR_BASE_URL = '<?= APP_URL ?>';
     </script>
     <script src="<?= url('assets/js/panier.js') ?>"></script>
+    <script src="<?= url('assets/js/cookie-banner.js') ?>"></script>
 
 </body>
 
