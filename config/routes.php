@@ -27,4 +27,10 @@ return [
     'GET /mentions-legales'         => 'PageController@mentions',
     'GET /cgv'                      => 'PageController@cgv',
     'GET /politique-confidentialite'=> 'PageController@confidentialite',
+
+    // ===== Panier =====
+    'GET /panier'              => 'PanierController@index',
+    'POST /panier/ajouter'     => 'PanierController@ajouter',
+    'POST /panier/modifier'    => 'PanierController@modifier',
+    'POST /panier/retirer'     => 'PanierController@retirer',
 ];

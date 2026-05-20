@@ -82,15 +82,15 @@
             <?php endif; ?>
         </div>
 
-        <!-- Ajout au panier (formulaire à brancher plus tard) -->
+        <!-- Ajout au panier -->
         <?php if ($stock > 0): ?>
             <div class="flex gap-3">
                 <div class="flex items-center border border-noir">
-                    <button type="button" class="w-10 h-11 text-lg hover:bg-sable transition-colors">−</button>
-                    <span class="px-4 leading-[2.75rem] border-x border-noir">1</span>
-                    <button type="button" class="w-10 h-11 text-lg hover:bg-sable transition-colors">+</button>
+                    <button type="button" id="qte-moins" class="w-10 h-11 text-lg hover:bg-sable transition-colors">−</button>
+                    <input type="number" id="quantite-produit" value="1" min="1" max="<?= $stock ?>" class="w-12 h-11 text-center border-x border-noir focus:outline-none" readonly>
+                    <button type="button" id="qte-plus" class="w-10 h-11 text-lg hover:bg-sable transition-colors">+</button>
                 </div>
-                <button type="button" class="flex-1 bg-noir text-blanc text-xs tracking-[0.25em] uppercase hover:bg-bordeaux transition-colors">
+                <button type="button" class="btn-ajouter-panier flex-1 bg-noir text-blanc text-xs tracking-[0.25em] uppercase hover:bg-bordeaux transition-colors" data-id="<?= (int)$produit['id'] ?>">
                     Ajouter au panier
                 </button>
             </div>
