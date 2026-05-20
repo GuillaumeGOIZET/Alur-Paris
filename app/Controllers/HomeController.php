@@ -12,9 +12,9 @@ class HomeController extends Controller
         echo "<p>✅ Le routeur fonctionne ! Tu es sur la home.</p>";
         echo "<p>Essaie d'autres URLs :</p>";
         echo "<ul>";
-        echo "<li><a href='/alur-paris/parfums'>/parfums</a></li>";
-        echo "<li><a href='/alur-paris/parfums/oud-royal'>/parfums/oud-royal</a></li>";
-        echo "<li><a href='/alur-paris/page-qui-existe-pas'>/page-qui-existe-pas</a> (404)</li>";
+        echo "<li><a href='" . url('parfums') . "'>/parfums</a></li>";
+        echo "<li><a href='" . url('parfums/oud-royal') . "'>/parfums/oud-royal</a></li>";
+        echo "<li><a href='" . url('page-qui-existe-pas') . "'>/page-qui-existe-pas</a> (404)</li>";
         echo "</ul>";
     }
 }

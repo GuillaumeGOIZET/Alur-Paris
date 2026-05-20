@@ -10,13 +10,13 @@ class ProduitController extends Controller
     {
         echo "<h1>Liste des parfums</h1>";
         echo "<p>✅ Route /parfums OK</p>";
-        echo "<p><a href='/alur-paris/'>← Retour</a></p>";
+        echo "<p><a href='" . url('') . "'>← Retour</a></p>";
     }
-    
+
     public function fiche(string $slug): void
     {
         echo "<h1>Fiche produit</h1>";
-        echo "<p>✅ Route /parfums/{slug} OK — paramètre reçu : <strong>" . htmlspecialchars($slug) . "</strong></p>";
-        echo "<p><a href='/alur-paris/parfums'>← Catalogue</a></p>";
+        echo "<p>✅ Route /parfums/{slug} OK — paramètre reçu : <strong>" . e($slug) . "</strong></p>";
+        echo "<p><a href='" . url('parfums') . "'>← Catalogue</a></p>";
     }
 }
