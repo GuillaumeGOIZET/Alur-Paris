@@ -62,6 +62,7 @@
         window.ALUR_BASE_URL = '<?= APP_URL ?>';
     </script>
     <script src="<?= url('assets/js/panier.js') ?>"></script>
+    <script src="<?= url('assets/js/favoris.js') ?>"></script>
     <script src="<?= url('assets/js/cookie-banner.js') ?>"></script>
 
 </body>

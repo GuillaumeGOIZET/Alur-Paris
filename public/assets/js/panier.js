@@ -1,10 +1,8 @@
-console.log('✅ panier.js est bien chargé');
 /**
  * Gestion asynchrone du panier Alur Paris.
  * Communique avec les endpoints /panier/* via fetch (AJAX).
  */
 
-// URL de base de l'application (injectée depuis le layout)
 const BASE_URL = window.ALUR_BASE_URL || '';
 
 /**
@@ -119,7 +117,6 @@ document.querySelectorAll('.btn-retirer').forEach((btn) => {
         });
 
         if (resultat.succes) {
-            // Retire la ligne visuellement
             const ligne = document.querySelector(`[data-ligne="${id}"]`);
             if (ligne) ligne.remove();
             rafraichirPanier(resultat.panier);
@@ -132,17 +129,14 @@ document.querySelectorAll('.btn-retirer').forEach((btn) => {
  * Rafraîchit l'affichage du panier (totaux, badge, quantités) sans recharger.
  */
 function rafraichirPanier(panier) {
-    // Badge header
     majBadgePanier(panier.nb_articles);
 
-    // Si panier vide, basculer l'affichage
     if (panier.nb_articles === 0) {
         document.getElementById('panier-vide')?.classList.remove('hidden');
         document.getElementById('panier-contenu')?.classList.add('hidden');
         return;
     }
 
-    // Mettre à jour chaque ligne
     panier.lignes.forEach((ligne) => {
         const spanQte = document.querySelector(`.qte-valeur[data-id="${ligne.id}"]`);
         if (spanQte) spanQte.textContent = ligne.quantite;
@@ -151,24 +145,23 @@ function rafraichirPanier(panier) {
         if (spanTotal) spanTotal.textContent = formaterPrix(ligne.sous_total_ttc);
     });
 
-    // Mettre à jour les totaux
-        document.getElementById('recap-ht').textContent = formaterPrix(panier.sous_total_ht);
-        document.getElementById('recap-tva').textContent = formaterPrix(panier.tva);
-        document.getElementById('recap-total').textContent = formaterPrix(panier.total_ttc);
-    }
+    document.getElementById('recap-ht').textContent = formaterPrix(panier.sous_total_ht);
+    document.getElementById('recap-tva').textContent = formaterPrix(panier.tva);
+    document.getElementById('recap-total').textContent = formaterPrix(panier.total_ttc);
+}
 
-    /**
-     * ===== SÉLECTEUR DE QUANTITÉ SUR LA FICHE PRODUIT =====
-     */
-    const champQte = document.getElementById('quantite-produit');
-    if (champQte) {
-        const max = parseInt(champQte.max, 10);
-        document.getElementById('qte-plus')?.addEventListener('click', () => {
-            let val = parseInt(champQte.value, 10);
-            if (val < max) champQte.value = val + 1;
-        });
-        document.getElementById('qte-moins')?.addEventListener('click', () => {
-            let val = parseInt(champQte.value, 10);
-            if (val > 1) champQte.value = val - 1;
-        });
-    }
+/**
+ * ===== SÉLECTEUR DE QUANTITÉ SUR LA FICHE PRODUIT =====
+ */
+const champQte = document.getElementById('quantite-produit');
+if (champQte) {
+    const max = parseInt(champQte.max, 10);
+    document.getElementById('qte-plus')?.addEventListener('click', () => {
+        let val = parseInt(champQte.value, 10);
+        if (val < max) champQte.value = val + 1;
+    });
+    document.getElementById('qte-moins')?.addEventListener('click', () => {
+        let val = parseInt(champQte.value, 10);
+        if (val > 1) champQte.value = val - 1;
+    });
+}

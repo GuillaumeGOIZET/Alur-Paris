@@ -52,4 +52,8 @@ return [
     'GET /commande/livraison'        => 'CommandeController@livraison',
     'POST /commande/livraison'       => 'CommandeController@traiterLivraison',
     'GET /commande/recapitulatif'    => 'CommandeController@recapitulatif',
+
+    // ===== Favoris =====
+    'GET /favoris'           => 'FavorisController@index',
+    'POST /favoris/basculer' => 'FavorisController@basculer',
 ];
