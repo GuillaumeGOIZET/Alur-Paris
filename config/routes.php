@@ -46,4 +46,10 @@ return [
 
     // ===== Back-office admin (protégé : admin requis) =====
     'GET /admin'         => ['Admin\\DashboardController@index', 'admin'],
+
+    // ===== Tunnel de commande =====
+    'GET /commande'                  => 'CommandeController@demarrer',
+    'GET /commande/livraison'        => 'CommandeController@livraison',
+    'POST /commande/livraison'       => 'CommandeController@traiterLivraison',
+    'GET /commande/recapitulatif'    => 'CommandeController@recapitulatif',
 ];
