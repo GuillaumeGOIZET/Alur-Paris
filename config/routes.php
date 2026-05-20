@@ -41,6 +41,9 @@ return [
     'POST /connexion'    => 'AuthController@connexion',
     'GET /deconnexion'   => 'AuthController@deconnexion',
 
-    // ===== Espace client =====
-    'GET /compte'        => 'CompteController@index',
+    /// ===== Espace client (protégé : connexion requise) =====
+    'GET /compte'        => ['CompteController@index', 'auth'],
+
+    // ===== Back-office admin (protégé : admin requis) =====
+    'GET /admin'         => ['Admin\\DashboardController@index', 'admin'],
 ];
