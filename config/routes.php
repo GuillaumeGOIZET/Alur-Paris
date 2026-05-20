@@ -33,4 +33,14 @@ return [
     'POST /panier/ajouter'     => 'PanierController@ajouter',
     'POST /panier/modifier'    => 'PanierController@modifier',
     'POST /panier/retirer'     => 'PanierController@retirer',
+
+    // ===== Authentification =====
+    'GET /inscription'   => 'AuthController@inscriptionForm',
+    'POST /inscription'  => 'AuthController@inscription',
+    'GET /connexion'     => 'AuthController@connexionForm',
+    'POST /connexion'    => 'AuthController@connexion',
+    'GET /deconnexion'   => 'AuthController@deconnexion',
+
+    // ===== Espace client =====
+    'GET /compte'        => 'CompteController@index',
 ];

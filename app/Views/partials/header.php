@@ -23,13 +23,43 @@
                         d="m21 21-5.197-5.197m0 0A7.5 7.5 0 1 0 5.196 5.196a7.5 7.5 0 0 0 10.607 10.607Z" />
                 </svg>
             </a>
-            <a href="<?= url('compte') ?>" aria-label="Mon compte" class="hover:text-bordeaux transition-colors">
-                <svg xmlns="http://www.w3.org/2000/svg" class="w-5 h-5" fill="none" viewBox="0 0 24 24"
-                    stroke="currentColor" stroke-width="1.5">
-                    <path stroke-linecap="round" stroke-linejoin="round"
-                        d="M15.75 6a3.75 3.75 0 1 1-7.5 0 3.75 3.75 0 0 1 7.5 0ZM4.501 20.118a7.5 7.5 0 0 1 14.998 0A17.933 17.933 0 0 1 12 21.75c-2.676 0-5.216-.584-7.499-1.632Z" />
-                </svg>
-            </a>
+            <?php if (\App\Core\Auth::estConnecte()): ?>
+                <?php $u = \App\Core\Auth::utilisateur(); ?>
+                <div class="relative group">
+                    <a href="<?= url('compte') ?>" aria-label="Mon compte"
+                        class="flex items-center gap-1 hover:text-bordeaux transition-colors">
+                        <svg xmlns="http://www.w3.org/2000/svg" class="w-5 h-5" fill="none" viewBox="0 0 24 24"
+                            stroke="currentColor" stroke-width="1.5">
+                            <path stroke-linecap="round" stroke-linejoin="round"
+                                d="M15.75 6a3.75 3.75 0 1 1-7.5 0 3.75 3.75 0 0 1 7.5 0ZM4.501 20.118a7.5 7.5 0 0 1 14.998 0A17.933 17.933 0 0 1 12 21.75c-2.676 0-5.216-.584-7.499-1.632Z" />
+                        </svg>
+                    </a>
+                    <!-- Menu déroulant -->
+                    <div
+                        class="absolute right-0 top-full mt-2 w-48 bg-blanc border border-noir/10 shadow-lg opacity-0 invisible group-hover:opacity-100 group-hover:visible transition-all">
+                        <div class="px-4 py-3 border-b border-noir/5">
+                            <p class="text-xs text-noir/40">Connecté en tant que</p>
+                            <p class="text-sm font-medium truncate"><?= e($u['prenom']) ?>     <?= e($u['nom']) ?></p>
+                        </div>
+                        <a href="<?= url('compte') ?>" class="block px-4 py-2 text-sm hover:bg-sable transition-colors">Mon
+                            compte</a>
+                        <?php if (\App\Core\Auth::estAdmin()): ?>
+                            <a href="<?= url('admin') ?>"
+                                class="block px-4 py-2 text-sm hover:bg-sable transition-colors">Administration</a>
+                        <?php endif; ?>
+                        <a href="<?= url('deconnexion') ?>"
+                            class="block px-4 py-2 text-sm text-bordeaux hover:bg-sable transition-colors">Déconnexion</a>
+                    </div>
+                </div>
+            <?php else: ?>
+                <a href="<?= url('connexion') ?>" aria-label="Connexion" class="hover:text-bordeaux transition-colors">
+                    <svg xmlns="http://www.w3.org/2000/svg" class="w-5 h-5" fill="none" viewBox="0 0 24 24"
+                        stroke="currentColor" stroke-width="1.5">
+                        <path stroke-linecap="round" stroke-linejoin="round"
+                            d="M15.75 6a3.75 3.75 0 1 1-7.5 0 3.75 3.75 0 0 1 7.5 0ZM4.501 20.118a7.5 7.5 0 0 1 14.998 0A17.933 17.933 0 0 1 12 21.75c-2.676 0-5.216-.584-7.499-1.632Z" />
+                    </svg>
+                </a>
+            <?php endif; ?>
             <a href="<?= url('panier') ?>" aria-label="Mon panier"
                 class="relative hover:text-bordeaux transition-colors">
                 <svg xmlns="http://www.w3.org/2000/svg" class="w-5 h-5" fill="none" viewBox="0 0 24 24"

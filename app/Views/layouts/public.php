@@ -40,6 +40,12 @@
     <?php require __DIR__ . '/../partials/header.php'; ?>
 
     <main>
+        <?php if ($flashSucces = \App\Core\Session::flash('succes')): ?>
+            <div class="bg-green-50 border-b border-green-200 text-green-800 text-sm text-center py-3 px-6">
+                <?= e($flashSucces) ?>
+            </div>
+        <?php endif; ?>
+
         <?= $content ?>
     </main>
 
