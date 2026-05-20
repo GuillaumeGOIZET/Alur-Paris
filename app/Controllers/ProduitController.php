@@ -36,7 +36,27 @@ class ProduitController extends Controller
      */
     public function fiche(string $slug): void
     {
-        // (à implémenter à l'étape suivante)
-        echo "Fiche produit : " . e($slug);
+        $produit = Produit::trouverParSlug($slug);
+
+        // Produit introuvable → 404
+        if ($produit === null) {
+            http_response_code(404);
+            $this->render('errors/404', ['titre' => 'Parfum introuvable']);
+            return;
+        }
+
+        $images     = Produit::trouverImages((int)$produit['id']);
+        $similaires = Produit::trouverSimilaires(
+            (int)$produit['id_categorie'],
+            (int)$produit['id'],
+            3
+        );
+
+        $this->render('produit/fiche', [
+            'titre'      => $produit['nom'],
+            'produit'    => $produit,
+            'images'     => $images,
+            'similaires' => $similaires,
+        ]);
     }
 }
