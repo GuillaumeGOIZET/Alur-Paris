@@ -73,4 +73,19 @@ class Utilisateur extends Model
 
         return $utilisateur;
     }
+    /**
+     * Liste tous les clients (role = client) avec leur nombre de commandes.
+     */
+    public static function trouverClientsAdmin(): array
+    {
+        $sql = "SELECT u.id, u.email, u.nom, u.prenom, u.telephone, u.cree_le,
+                       COUNT(c.id) AS nb_commandes
+                FROM utilisateur u
+                LEFT JOIN commande c ON c.id_utilisateur = u.id
+                WHERE u.role = 'client'
+                GROUP BY u.id
+                ORDER BY u.cree_le DESC";
+
+        return Database::getConnection()->query($sql)->fetchAll();
+    }
 }

@@ -30,4 +30,23 @@ class ContactMessage extends Model
 
         return (int)Database::getConnection()->lastInsertId();
     }
+    /**
+     * Liste tous les messages, non traités en premier, puis par date.
+     */
+    public static function trouverTousAdmin(): array
+    {
+        $sql = "SELECT * FROM contact_message
+                ORDER BY est_traite ASC, cree_le DESC";
+        return Database::getConnection()->query($sql)->fetchAll();
+    }
+
+    /**
+     * Marque un message comme traité (ou non traité).
+     */
+    public static function marquerTraite(int $id, bool $traite = true): bool
+    {
+        $sql = "UPDATE contact_message SET est_traite = :traite WHERE id = :id";
+        $stmt = Database::getConnection()->prepare($sql);
+        return $stmt->execute(['traite' => $traite ? 1 : 0, 'id' => $id]);
+    }
 }

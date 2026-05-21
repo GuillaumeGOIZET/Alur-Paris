@@ -71,4 +71,7 @@ return [
     'GET /admin/commandes'                 => ['Admin\\CommandeController@index', 'admin'],
     'POST /admin/commandes/statut'         => ['Admin\\CommandeController@changerStatut', 'admin'],
     'GET /admin/commandes/{id}'            => ['Admin\\CommandeController@detail', 'admin'],
+    'GET /admin/clients' => ['Admin\\ClientController@index', 'admin'],
+    'GET /admin/messages'          => ['Admin\\MessageController@index', 'admin'],
+    'POST /admin/messages/traiter' => ['Admin\\MessageController@traiter', 'admin'],
 ];
