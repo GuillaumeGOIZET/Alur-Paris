@@ -70,7 +70,7 @@ class Router
     private function executerMiddleware(string $nom): void
     {
         $map = [
-            'auth'  => \App\Middleware\AuthMiddleware::class,
+            'auth' => \App\Middleware\AuthMiddleware::class,
             'admin' => \App\Middleware\AdminMiddleware::class,
         ];
 
@@ -138,11 +138,31 @@ class Router
     /**
      * Affiche une page 404 simple.
      */
+    /**
+     * Affiche la page 404 stylée (même rendu partout).
+     */
     private function renderNotFound(): void
     {
         http_response_code(404);
-        echo "<h1>404 — Page non trouvée</h1>";
-        echo "<p>La page demandée n'existe pas.</p>";
-        echo '<p><a href="' . APP_URL . '/">Retour à l\'accueil</a></p>';
+
+        $titre = 'Page introuvable';
+
+        // Capture la vue 404 dans $content
+        ob_start();
+        $viewPath = __DIR__ . '/../Views/errors/404.php';
+        if (file_exists($viewPath)) {
+            require $viewPath;
+        } else {
+            echo '<h1>404 — Page non trouvée</h1>';
+        }
+        $content = ob_get_clean();
+
+        // Enveloppe dans le layout public
+        $layoutPath = __DIR__ . '/../Views/layouts/public.php';
+        if (file_exists($layoutPath)) {
+            require $layoutPath;
+        } else {
+            echo $content; // fallback si pas de layout
+        }
     }
 }

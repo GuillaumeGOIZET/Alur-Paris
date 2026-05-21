@@ -185,4 +185,61 @@ class Commande extends Model
             'recentes'     => $recentes,
         ];
     }
+    /**
+     * Liste toutes les commandes pour l'admin, avec le libellé du statut.
+     */
+    public static function trouverToutesAdmin(): array
+    {
+        $sql = "SELECT c.*, s.libelle AS statut_libelle, s.couleur_badge
+                FROM commande c
+                INNER JOIN statut_commande s ON c.id_statut = s.id
+                ORDER BY c.cree_le DESC";
+
+        $stmt = Database::getConnection()->query($sql);
+        return $stmt->fetchAll();
+    }
+
+    /**
+     * Récupère une commande complète par son id (avec lignes et statut).
+     */
+    public static function trouverDetailAdmin(int $id): ?array
+    {
+        $pdo = Database::getConnection();
+
+        $sql = "SELECT c.*, s.libelle AS statut_libelle, s.couleur_badge
+                FROM commande c
+                INNER JOIN statut_commande s ON c.id_statut = s.id
+                WHERE c.id = :id LIMIT 1";
+        $stmt = $pdo->prepare($sql);
+        $stmt->execute(['id' => $id]);
+        $commande = $stmt->fetch();
+
+        if ($commande === false) {
+            return null;
+        }
+
+        $stmtLignes = $pdo->prepare("SELECT * FROM ligne_commande WHERE id_commande = :id");
+        $stmtLignes->execute(['id' => $id]);
+        $commande['lignes'] = $stmtLignes->fetchAll();
+
+        return $commande;
+    }
+
+    /**
+     * Change le statut d'une commande.
+     */
+    public static function changerStatut(int $id, int $idStatut): bool
+    {
+        $sql = "UPDATE commande SET id_statut = :statut, modifie_le = NOW() WHERE id = :id";
+        $stmt = Database::getConnection()->prepare($sql);
+        return $stmt->execute(['statut' => $idStatut, 'id' => $id]);
+    }
+    /**
+     * Liste tous les statuts de commande possibles (pour le menu déroulant).
+     */
+    public static function tousLesStatuts(): array
+    {
+        $sql = "SELECT * FROM statut_commande ORDER BY ordre_affichage ASC";
+        return Database::getConnection()->query($sql)->fetchAll();
+    }
 }

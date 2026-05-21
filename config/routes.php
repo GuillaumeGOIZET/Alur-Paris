@@ -68,4 +68,7 @@ return [
     'POST /admin/produits/enregistrer'   => ['Admin\\ProduitController@enregistrer', 'admin'],
     'POST /admin/produits/supprimer'     => ['Admin\\ProduitController@supprimer', 'admin'],
     'GET /admin/produits/{id}/editer'    => ['Admin\\ProduitController@editer', 'admin'],
+    'GET /admin/commandes'                 => ['Admin\\CommandeController@index', 'admin'],
+    'POST /admin/commandes/statut'         => ['Admin\\CommandeController@changerStatut', 'admin'],
+    'GET /admin/commandes/{id}'            => ['Admin\\CommandeController@detail', 'admin'],
 ];
