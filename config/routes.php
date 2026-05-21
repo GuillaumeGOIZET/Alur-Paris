@@ -61,4 +61,11 @@ return [
     'GET /commande/payer'         => 'CommandeController@payer',
     'GET /commande/succes'        => 'CommandeController@succes',
     'GET /commande/annule'        => 'CommandeController@annule',
+
+    // ===== Admin =====
+    'GET /admin/produits' => ['Admin\\ProduitController@index', 'admin'],
+    'GET /admin/produits/nouveau'        => ['Admin\\ProduitController@nouveau', 'admin'],
+    'POST /admin/produits/enregistrer'   => ['Admin\\ProduitController@enregistrer', 'admin'],
+    'POST /admin/produits/supprimer'     => ['Admin\\ProduitController@supprimer', 'admin'],
+    'GET /admin/produits/{id}/editer'    => ['Admin\\ProduitController@editer', 'admin'],
 ];

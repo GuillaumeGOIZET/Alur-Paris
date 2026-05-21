@@ -197,4 +197,100 @@ class Produit extends Model
 
         return $stmt->fetchAll();
     }
+    /**
+     * Récupère tous les produits pour l'admin (publiés ou non, non supprimés),
+     * avec leur catégorie. Triés par date de création décroissante.
+     */
+    public static function trouverTousAdmin(): array
+    {
+        $sql = "SELECT p.*, c.nom AS categorie_nom
+                FROM produit p
+                INNER JOIN categorie c ON p.id_categorie = c.id
+                WHERE p.supprime_le IS NULL
+                ORDER BY p.cree_le DESC";
+
+        $stmt = Database::getConnection()->query($sql);
+        return $stmt->fetchAll();
+    }
+    /**
+     * Crée un nouveau produit. Retourne son id.
+     */
+    public static function creer(array $d): int
+    {
+        $sql = "INSERT INTO produit (
+                    id_categorie, nom, slug, marque,
+                    description_courte, description_longue,
+                    notes_tete, notes_coeur, notes_fond,
+                    genre, contenance_ml, prix_ttc, taux_tva,
+                    stock, est_publie, est_mis_en_avant, cree_le, modifie_le
+                ) VALUES (
+                    :id_categorie, :nom, :slug, :marque,
+                    :desc_courte, :desc_longue,
+                    :notes_tete, :notes_coeur, :notes_fond,
+                    :genre, :contenance, :prix, :tva,
+                    :stock, :publie, :avant, NOW(), NOW()
+                )";
+
+        $stmt = Database::getConnection()->prepare($sql);
+        $stmt->execute(self::parametres($d));
+
+        return (int)Database::getConnection()->lastInsertId();
+    }
+
+    /**
+     * Met à jour un produit existant.
+     */
+    public static function mettreAJour(int $id, array $d): bool
+    {
+        $sql = "UPDATE produit SET
+                    id_categorie = :id_categorie, nom = :nom, slug = :slug, marque = :marque,
+                    description_courte = :desc_courte, description_longue = :desc_longue,
+                    notes_tete = :notes_tete, notes_coeur = :notes_coeur, notes_fond = :notes_fond,
+                    genre = :genre, contenance_ml = :contenance, prix_ttc = :prix, taux_tva = :tva,
+                    stock = :stock, est_publie = :publie, est_mis_en_avant = :avant,
+                    modifie_le = NOW()
+                WHERE id = :id";
+
+        $params = self::parametres($d);
+        $params['id'] = $id;
+
+        $stmt = Database::getConnection()->prepare($sql);
+        return $stmt->execute($params);
+    }
+
+    /**
+     * Suppression "douce" : on marque supprime_le sans effacer la ligne.
+     * Préserve l'intégrité des commandes passées (FK RESTRICT sur ligne_commande).
+     */
+    public static function supprimer(int $id): bool
+    {
+        $sql = "UPDATE produit SET supprime_le = NOW(), est_publie = 0 WHERE id = :id";
+        $stmt = Database::getConnection()->prepare($sql);
+        return $stmt->execute(['id' => $id]);
+    }
+
+    /**
+     * Prépare le tableau de paramètres communs à creer() et mettreAJour().
+     */
+    private static function parametres(array $d): array
+    {
+        return [
+            'id_categorie' => (int)$d['id_categorie'],
+            'nom'          => $d['nom'],
+            'slug'         => $d['slug'],
+            'marque'       => $d['marque'] ?? 'Alur Paris',
+            'desc_courte'  => $d['description_courte'] ?? null,
+            'desc_longue'  => $d['description_longue'],
+            'notes_tete'   => $d['notes_tete'] ?? null,
+            'notes_coeur'  => $d['notes_coeur'] ?? null,
+            'notes_fond'   => $d['notes_fond'] ?? null,
+            'genre'        => $d['genre'],
+            'contenance'   => (int)$d['contenance_ml'],
+            'prix'         => (float)$d['prix_ttc'],
+            'tva'          => (float)($d['taux_tva'] ?? 20),
+            'stock'        => (int)$d['stock'],
+            'publie'       => !empty($d['est_publie']) ? 1 : 0,
+            'avant'        => !empty($d['est_mis_en_avant']) ? 1 : 0,
+        ];
+    }
 }
