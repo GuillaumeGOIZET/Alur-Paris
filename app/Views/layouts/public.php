@@ -37,34 +37,43 @@
 
 <body class="font-sans text-noir bg-blanc antialiased">
 
-    <?php require __DIR__ . '/../partials/header.php'; ?>
+    <body class="font-sans text-noir bg-blanc antialiased">
 
-    <main>
-        <?php if ($flashSucces = \App\Core\Session::flash('succes')): ?>
-            <div class="bg-green-50 border-b border-green-200 text-green-800 text-sm text-center py-3 px-6">
-                <?= e($flashSucces) ?>
-            </div>
-        <?php endif; ?>
+        <!-- Bandeau promotionnel -->
+        <div class="bg-bordeaux text-blanc text-center py-2 px-4">
+            <p class="text-[11px] tracking-[0.15em] uppercase">
+                Livraison offerte dès 150 € d'achat · échantillon offert avec votre commande · Retours gratuits
+            </p>
+        </div>
 
-        <?= $content ?>
-    </main>
+        <?php require __DIR__ . '/../partials/header.php'; ?>
 
-    <?php require __DIR__ . '/../partials/footer.php'; ?>
+        <main>
+            <?php if ($flashSucces = \App\Core\Session::flash('succes')): ?>
+                <div class="bg-green-50 border-b border-green-200 text-green-800 text-sm text-center py-3 px-6">
+                    <?= e($flashSucces) ?>
+                </div>
+            <?php endif; ?>
 
-    <!-- Toast de notification (caché par défaut) -->
-    <div id="toast"
-        class="fixed bottom-6 right-6 bg-noir text-blanc text-sm px-6 py-3 opacity-0 pointer-events-none transition-opacity duration-300 z-50">
-    </div>
+            <?= $content ?>
+        </main>
 
-    <?php require __DIR__ . '/../partials/cookie-banner.php'; ?>
+        <?php require __DIR__ . '/../partials/footer.php'; ?>
 
-    <script>
-        window.ALUR_BASE_URL = '<?= APP_URL ?>';
-    </script>
-    <script src="<?= url('assets/js/panier.js') ?>"></script>
-    <script src="<?= url('assets/js/favoris.js') ?>"></script>
-    <script src="<?= url('assets/js/cookie-banner.js') ?>"></script>
+        <!-- Toast de notification (caché par défaut) -->
+        <div id="toast"
+            class="fixed bottom-6 right-6 bg-noir text-blanc text-sm px-6 py-3 opacity-0 pointer-events-none transition-opacity duration-300 z-50">
+        </div>
 
-</body>
+        <?php require __DIR__ . '/../partials/cookie-banner.php'; ?>
+
+        <script>
+            window.ALUR_BASE_URL = '<?= APP_URL ?>';
+        </script>
+        <script src="<?= url('assets/js/panier.js') ?>"></script>
+        <script src="<?= url('assets/js/favoris.js') ?>"></script>
+        <script src="<?= url('assets/js/cookie-banner.js') ?>"></script>
+
+    </body>
 
 </html>
