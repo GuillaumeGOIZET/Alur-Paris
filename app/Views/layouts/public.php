@@ -13,7 +13,7 @@
     <link
         href="https://fonts.googleapis.com/css2?family=Playfair+Display:wght@400;500;600&family=Poppins:wght@300;400;500;600&display=swap"
         rel="stylesheet">
-
+    <link rel="stylesheet" href="<?= url('assets/css/fonts.css') ?>">
     <script src="https://cdn.tailwindcss.com"></script>
     <script>
         tailwind.config = {
@@ -26,7 +26,7 @@
                         sable: '#f9f6f1',
                     },
                     fontFamily: {
-                        serif: ['"Playfair Display"', 'serif'],
+                        serif: ['Griffon', '"Playfair Display"', 'serif'],
                         sans: ['Poppins', 'sans-serif'],
                     }
                 }

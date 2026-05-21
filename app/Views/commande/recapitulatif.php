@@ -1,3 +1,11 @@
+<?php $erreurMsg = \App\Core\Session::flash('erreur'); ?>
+<?php if ($erreurMsg): ?>
+    <div class="max-w-5xl mx-auto px-6 pt-6">
+        <div class="bg-bordeaux/10 border border-bordeaux/30 text-bordeaux text-sm px-4 py-3">
+            <?= e($erreurMsg) ?>
+        </div>
+    </div>
+<?php endif; ?>
 <div class="border-b border-noir/5">
     <div class="max-w-7xl mx-auto px-6 py-4 text-xs tracking-[0.1em] uppercase text-noir/40">
         <a href="<?= url('panier') ?>" class="hover:text-bordeaux">Panier</a>
@@ -38,7 +46,8 @@
             <h2 class="font-serif text-sm tracking-[0.15em] uppercase mb-4">Articles</h2>
             <?php foreach ($panier['lignes'] as $ligne): ?>
                 <div class="flex justify-between py-2 text-sm border-b border-noir/5 last:border-0">
-                    <span class="text-noir/70"><?= e($ligne['nom']) ?> <span class="text-noir/40">×<?= $ligne['quantite'] ?></span></span>
+                    <span class="text-noir/70"><?= e($ligne['nom']) ?> <span
+                            class="text-noir/40">×<?= $ligne['quantite'] ?></span></span>
                     <span><?= number_format($ligne['sous_total_ttc'], 2, ',', ' ') ?> €</span>
                 </div>
             <?php endforeach; ?>
@@ -67,12 +76,19 @@
             <span><?= number_format($panier['total_ttc'], 2, ',', ' ') ?> €</span>
         </div>
 
-        <!-- Bouton paiement (Stripe sera branché ici demain) -->
-        <button type="button" disabled class="w-full bg-noir/20 text-blanc text-xs tracking-[0.25em] uppercase py-4 cursor-not-allowed">
-            Paiement (à venir)
-        </button>
-        <p class="text-[10px] text-noir/40 text-center mt-3 leading-relaxed">
-            Le paiement sécurisé Stripe sera intégré à l'étape suivante.
-        </p>
+        <a href="<?= url('commande/payer') ?>"
+            class="block text-center w-full bg-noir text-blanc text-xs tracking-[0.25em] uppercase py-4 hover:bg-bordeaux transition-colors">
+            Payer
+            <?= number_format($panier['total_ttc'] >= 150 ? $panier['total_ttc'] : $panier['total_ttc'] + 6.90, 2, ',', ' ') ?>
+            €
+        </a>
+        <div class="flex items-center justify-center gap-2 mt-4 text-[10px] text-noir/40">
+            <svg xmlns="http://www.w3.org/2000/svg" class="w-4 h-4" fill="none" viewBox="0 0 24 24"
+                stroke="currentColor" stroke-width="1.5">
+                <path stroke-linecap="round" stroke-linejoin="round"
+                    d="M16.5 10.5V6.75a4.5 4.5 0 1 0-9 0v3.75m-.75 11.25h10.5a2.25 2.25 0 0 0 2.25-2.25v-6.75a2.25 2.25 0 0 0-2.25-2.25H6.75a2.25 2.25 0 0 0-2.25 2.25v6.75a2.25 2.25 0 0 0 2.25 2.25Z" />
+            </svg>
+            Paiement sécurisé par Stripe
+        </div>
     </aside>
 </section>

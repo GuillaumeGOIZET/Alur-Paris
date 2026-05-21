@@ -56,4 +56,9 @@ return [
     // ===== Favoris =====
     'GET /favoris'           => 'FavorisController@index',
     'POST /favoris/basculer' => 'FavorisController@basculer',
+
+    // ===== Paiement (Stripe) =====
+    'GET /commande/payer'         => 'CommandeController@payer',
+    'GET /commande/succes'        => 'CommandeController@succes',
+    'GET /commande/annule'        => 'CommandeController@annule',
 ];
