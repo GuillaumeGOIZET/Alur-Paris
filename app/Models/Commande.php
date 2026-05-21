@@ -158,4 +158,31 @@ class Commande extends Model
 
         return $commande;
     }
+    /**
+     * Statistiques pour le dashboard admin.
+     */
+    public static function statistiques(): array
+    {
+        $pdo = Database::getConnection();
+
+        // Chiffre d'affaires total (commandes payées)
+        $ca = $pdo->query("SELECT COALESCE(SUM(montant_total_ttc), 0) FROM commande WHERE statut_paiement = 'reussi'")->fetchColumn();
+
+        // Nombre de commandes
+        $nbCommandes = $pdo->query("SELECT COUNT(*) FROM commande WHERE statut_paiement = 'reussi'")->fetchColumn();
+
+        // Panier moyen
+        $panierMoyen = $nbCommandes > 0 ? $ca / $nbCommandes : 0;
+
+        // Commandes récentes (5 dernières)
+        $stmt = $pdo->query("SELECT * FROM commande ORDER BY cree_le DESC LIMIT 5");
+        $recentes = $stmt->fetchAll();
+
+        return [
+            'ca'           => (float)$ca,
+            'nb_commandes' => (int)$nbCommandes,
+            'panier_moyen' => (float)$panierMoyen,
+            'recentes'     => $recentes,
+        ];
+    }
 }

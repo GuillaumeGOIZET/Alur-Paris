@@ -3,16 +3,29 @@
 namespace App\Controllers\Admin;
 
 use App\Core\Controller;
-use App\Core\Auth;
+use App\Models\Commande;
+use App\Models\Produit;
+use App\Models\Utilisateur;
+use App\Core\Database;
 
 class DashboardController extends Controller
 {
     public function index(): void
     {
-        // L'accès admin est garanti par le middleware 'admin'
-        echo "<h1>Back-office Alur Paris</h1>";
-        echo "<p>✅ Accès admin autorisé. Bonjour " . e(Auth::utilisateur()['prenom']) . " !</p>";
-        echo "<p>Le vrai dashboard sera construit demain.</p>";
-        echo "<p><a href='" . url('') . "'>← Retour au site</a> · <a href='" . url('deconnexion') . "'>Déconnexion</a></p>";
+        $stats = Commande::statistiques();
+
+        // Quelques compteurs supplémentaires
+        $pdo = Database::getConnection();
+        $nbProduits = (int)$pdo->query("SELECT COUNT(*) FROM produit WHERE supprime_le IS NULL")->fetchColumn();
+        $nbClients  = (int)$pdo->query("SELECT COUNT(*) FROM utilisateur WHERE role = 'client'")->fetchColumn();
+        $nbMessages = (int)$pdo->query("SELECT COUNT(*) FROM contact_message WHERE est_traite = 0")->fetchColumn();
+
+        $this->render('admin/dashboard', [
+            'titre'      => 'Tableau de bord',
+            'stats'      => $stats,
+            'nbProduits' => $nbProduits,
+            'nbClients'  => $nbClients,
+            'nbMessages' => $nbMessages,
+        ], 'admin'); // ← le 3e paramètre = layout admin
     }
 }
