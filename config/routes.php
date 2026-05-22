@@ -43,6 +43,7 @@ return [
 
     /// ===== Espace client (protégé : connexion requise) =====
     'GET /compte'        => ['CompteController@index', 'auth'],
+    'POST /compte/modifier' => ['CompteController@modifier', 'auth'],
 
     // ===== Back-office admin (protégé : admin requis) =====
     'GET /admin'         => ['Admin\\DashboardController@index', 'admin'],
@@ -74,4 +75,6 @@ return [
     'GET /admin/clients' => ['Admin\\ClientController@index', 'admin'],
     'GET /admin/messages'          => ['Admin\\MessageController@index', 'admin'],
     'POST /admin/messages/traiter' => ['Admin\\MessageController@traiter', 'admin'],
+    'POST /admin/produits/image/supprimer'   => ['Admin\\ProduitController@supprimerImage', 'admin'],
+    'POST /admin/produits/image/principale'  => ['Admin\\ProduitController@imagePrincipale', 'admin'],
 ];

@@ -3,8 +3,7 @@
 
         <!-- Logo -->
         <a href="<?= url('') ?>" class="flex flex-col items-center leading-none">
-            <span class="font-serif text-2xl tracking-[0.18em] text-noir">ALUR</span>
-            <span class="text-[9px] tracking-[0.4em] text-noir mt-0.5">PARIS</span>
+            <img src="<?= url('assets/images/Logo.png') ?>" alt="Alur Paris" class="h-7 w-auto">
         </a>
 
         <!-- Navigation centrale -->

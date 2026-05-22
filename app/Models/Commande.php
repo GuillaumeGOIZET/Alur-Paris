@@ -242,4 +242,19 @@ class Commande extends Model
         $sql = "SELECT * FROM statut_commande ORDER BY ordre_affichage ASC";
         return Database::getConnection()->query($sql)->fetchAll();
     }
+    /**
+     * Récupère les commandes d'un utilisateur, avec le libellé du statut.
+     */
+    public static function trouverParUtilisateur(int $idUtilisateur): array
+    {
+        $sql = "SELECT c.*, s.libelle AS statut_libelle, s.couleur_badge
+                FROM commande c
+                INNER JOIN statut_commande s ON c.id_statut = s.id
+                WHERE c.id_utilisateur = :id
+                ORDER BY c.cree_le DESC";
+
+        $stmt = Database::getConnection()->prepare($sql);
+        $stmt->execute(['id' => $idUtilisateur]);
+        return $stmt->fetchAll();
+    }
 }

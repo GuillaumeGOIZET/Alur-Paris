@@ -16,14 +16,30 @@
 
     <!-- ===== GALERIE ===== -->
     <div>
-        <div class="aspect-[4/5] bg-sable flex items-center justify-center overflow-hidden">
+        <!-- Grande image (change au clic sur une miniature) -->
+        <div class="aspect-[4/5] bg-blanc flex items-center justify-center overflow-hidden mb-3">
             <?php if (!empty($images)): ?>
-                <img src="<?= url('assets/uploads/produits/' . basename($images[0]['chemin_fichier'])) ?>"
-                    alt="<?= e($images[0]['texte_alternatif'] ?? $produit['nom']) ?>" class="w-full h-full object-cover">
+                <img id="image-principale"
+                    src="<?= url('assets/uploads/produits/' . basename($images[0]['chemin_fichier'])) ?>"
+                    alt="<?= e($images[0]['texte_alternatif'] ?? $produit['nom']) ?>" class="w-full h-full object-contain">
             <?php else: ?>
                 <span class="font-serif text-noir/30">Visuel à venir</span>
             <?php endif; ?>
         </div>
+
+        <!-- Miniatures (seulement s'il y a plus d'une image) -->
+        <?php if (count($images) > 1): ?>
+            <div class="flex gap-3">
+                <?php foreach ($images as $index => $img): ?>
+                    <button type="button"
+                        class="miniature aspect-square w-20 bg-sable overflow-hidden border-2 <?= $index === 0 ? 'border-bordeaux' : 'border-transparent' ?> hover:border-bordeaux transition-colors"
+                        data-image="<?= url('assets/uploads/produits/' . basename($img['chemin_fichier'])) ?>">
+                        <img src="<?= url('assets/uploads/produits/' . basename($img['chemin_fichier'])) ?>"
+                            alt="<?= e($img['texte_alternatif'] ?? '') ?>" class="w-full h-full object-cover">
+                    </button>
+                <?php endforeach; ?>
+            </div>
+        <?php endif; ?>
     </div>
 
     <!-- ===== INFOS ===== -->

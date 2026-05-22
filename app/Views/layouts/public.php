@@ -73,6 +73,7 @@
         <script src="<?= url('assets/js/panier.js') ?>"></script>
         <script src="<?= url('assets/js/favoris.js') ?>"></script>
         <script src="<?= url('assets/js/cookie-banner.js') ?>"></script>
+        <script src="<?= url('assets/js/galerie.js') ?>"></script>
 
     </body>
 

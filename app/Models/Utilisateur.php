@@ -88,4 +88,22 @@ class Utilisateur extends Model
 
         return Database::getConnection()->query($sql)->fetchAll();
     }
+    /**
+     * Met à jour les informations de profil d'un utilisateur.
+     * (Ne touche ni à l'email, ni au mot de passe, ni au rôle.)
+     */
+    public static function mettreAJourProfil(int $id, array $d): bool
+    {
+        $sql = "UPDATE utilisateur SET
+                    nom = :nom, prenom = :prenom, telephone = :telephone
+                WHERE id = :id";
+
+        $stmt = Database::getConnection()->prepare($sql);
+        return $stmt->execute([
+            'nom'       => $d['nom'],
+            'prenom'    => $d['prenom'],
+            'telephone' => $d['telephone'] ?? null,
+            'id'        => $id,
+        ]);
+    }
 }
