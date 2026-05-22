@@ -132,3 +132,83 @@
   pour rendre le code portable entre dev et production.
 - Construction du tunnel de commande SANS le paiement d'abord, pour réduire le risque 
   sur la journée de jeudi (paiement Stripe = partie la plus délicate).
+
+  ---
+
+## Jour 4 - Jeudi 21 mai
+
+### Ce que j'ai fait
+
+- Résolution d'un incident de démarrage MySQL (corruption des tables Aria) au lancement de la journée
+- Intégration du paiement en ligne avec Stripe (Stripe Checkout, mode test) :
+  création de session de paiement, redirection, page de confirmation
+- Création transactionnelle des commandes en base après paiement validé,
+  avec décrément automatique du stock
+- Envoi d'un email de confirmation de commande (réutilisation de la classe Mailer)
+- Construction du back-office administrateur complet :
+  - Layout admin dédié avec navigation latérale
+  - Tableau de bord avec indicateurs (CA, nombre de commandes, panier moyen)
+  - CRUD complet des produits (création, édition, suppression douce)
+  - Gestion des commandes (liste, détail, changement de statut)
+  - Gestion des clients et des messages de contact
+- Unification de la page d'erreur 404 (une seule page stylée sur tout le site)
+
+### Difficultés rencontrées
+
+- Au démarrage, MySQL refusait de se lancer ("Aria recovery failed").
+  Diagnostic via le journal d'erreurs : tables système Aria corrompues suite à
+  un arrêt non propre du PC la veille. Résolution : suppression des fichiers
+  aria_log.* (recréés automatiquement au redémarrage), sans perte de données.
+  → Leçon : toujours arrêter MySQL proprement avant d'éteindre la machine.
+- Compréhension du flux de paiement Stripe : bien distinguer le moment où créer
+  la commande (après confirmation du paiement, pas avant). Gestion d'un cas de
+  doublon si le client rafraîchit la page de succès.
+- Gestion des montants en centimes attendus par Stripe (conversion et arrondi).
+
+### Décisions clés prises
+
+- Stripe Checkout (page de paiement hébergée par Stripe) plutôt qu'une saisie de
+  carte sur le site : conformité PCI-DSS déléguée, aucune donnée bancaire ne
+  transite par mon serveur. Les webhooks sont identifiés comme évolution pour la
+  production (non implémentés en local).
+- Création de commande dans une transaction SQL (tout ou rien) avec garde sur le
+  stock, pour garantir la cohérence des données.
+- Suppression douce (soft delete) des produits, car la clé étrangère en RESTRICT
+  empêche la suppression d'un produit déjà commandé : préservation de l'historique.
+
+  ---
+
+## Jour 5 - Vendred 22 mai
+
+### Ce que j'ai fait
+
+- Finitions visuelles : bandeau promotionnel "livraison offerte", image de fond
+  sur le hero d'accueil avec voile de lisibilité, intégration du logo
+- Enrichissement de l'espace client : modification des informations personnelles
+  et affichage de l'historique des commandes
+- Système complet de gestion des images produits :
+  - Upload sécurisé (vérification du type réel via finfo, renommage des fichiers,
+    contrôle de la taille)
+  - Définition de l'image principale et suppression d'images (fichier + base)
+  - Galerie interactive sur la fiche produit (miniatures cliquables)
+- Préparation du dossier projet, du journal de bord et de la soutenance
+
+### Difficultés rencontrées
+
+- Images "fantômes" héritées du jeu de données initial (chemins en dur pointant
+  vers des fichiers inexistants) : nettoyage de la base pour ne garder que les
+  uploads réels.
+- Bouton "Enregistrer" du formulaire produit inopérant : cause = formulaires HTML
+  imbriqués (interdit). Solution : sortir les formulaires de gestion d'images
+  hors du formulaire principal.
+- Affichage des images de tailles variées : choix entre object-cover (recadrage)
+  et object-contain (image entière). Retenu : object-contain + fond blanc pour un
+  rendu propre quelle que soit l'image.
+
+### Décisions clés prises
+
+- Sécurisation de l'upload prioritaire : ne jamais faire confiance à l'extension
+  déclarée, vérifier le type MIME réel du fichier, renommer pour éviter tout
+  fichier malveillant ou collision.
+- Gestion d'images via le back-office plutôt qu'en dur, pour une vraie autonomie
+  de l'administrateur.
